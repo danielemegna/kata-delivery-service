@@ -8,10 +8,6 @@ defmodule DeliveryService do
     [%{name: hub_name} | state]
   end
 
-  def register_locker(state, locker_name, max_size) when is_integer(max_size) do
-    register_locker(state, locker_name, [max_size])
-  end
-
   def register_locker(state, locker_name, box_sizes) do
     [%{name: locker_name, box_sizes: box_sizes} | state]
   end

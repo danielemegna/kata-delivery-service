@@ -26,22 +26,22 @@ defmodule DeliveryServiceTest do
 
   test "single locker big enough" do
     delivery_points = DeliveryService.init()
-      |> register_locker("evia", 80)
+      |> register_locker("evia", [80])
       |> delivery_points_for(50)
     assert delivery_points == ["evia"]
   end
 
   test "single little locker" do
     delivery_points = DeliveryService.init()
-      |> register_locker("lisa", 1)
+      |> register_locker("lisa", [1])
       |> delivery_points_for(50)
     assert delivery_points == []
   end
 
   test "multiple lockers" do
     delivery_points = DeliveryService.init()
-      |> register_locker("lisa", 1)
-      |> register_locker("evia", 50)
+      |> register_locker("lisa", [1])
+      |> register_locker("evia", [50])
       |> delivery_points_for(50)
     assert delivery_points == ["evia"]
   end
