@@ -46,6 +46,7 @@ defmodule DeliveryServiceTest do
     assert delivery_points == ["evia"]
   end
 
+  # locker with multiple boxes
   # occupied locker
   # hub and locker mixed example
 
