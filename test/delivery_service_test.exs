@@ -46,7 +46,14 @@ defmodule DeliveryServiceTest do
     assert delivery_points == ["evia"]
   end
 
-  # locker with multiple boxes
+  test "lockers with multiple boxes" do
+    delivery_points = DeliveryService.init()
+      |> register_locker("alice", [10, 60])
+      |> register_locker("bob", [8, 40])
+      |> delivery_points_for(50)
+    assert delivery_points == ["alice"]
+  end
+
   # occupied locker
   # hub and locker mixed example
 

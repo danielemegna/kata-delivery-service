@@ -8,16 +8,26 @@ defmodule DeliveryService do
     [%{name: hub_name} | state]
   end
 
-  def register_locker(state, locker_name, max_size) do
-    [%{name: locker_name, max_size: max_size} | state]
+  def register_locker(state, locker_name, max_size) when is_integer(max_size) do
+    register_locker(state, locker_name, [max_size])
+  end
+
+  def register_locker(state, locker_name, box_sizes) do
+    [%{name: locker_name, box_sizes: box_sizes} | state]
   end
 
   def delivery_points_for(state, package_size) do
     state
-      |> Enum.filter(fn point ->
-        !Map.has_key?(point, :max_size) || point.max_size >= package_size
-      end)
+      |> Enum.filter(fn point -> can_contain(point, package_size) end)
       |> Enum.map(&(&1.name))
   end
+
+  defp can_contain(%{box_sizes: box_sizes}, package_size) do
+    Enum.any?(box_sizes, fn box_size ->
+      box_size >= package_size
+    end)
+  end
+
+  defp can_contain(_point, _package_size), do: true
 
 end
