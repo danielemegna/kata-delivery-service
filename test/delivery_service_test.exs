@@ -62,7 +62,15 @@ defmodule DeliveryServiceTest do
     assert delivery_points == []
   end
 
-  # occupied locker
+  test "occupy not influent locker box" do
+    delivery_points = DeliveryService.init()
+      |> register_locker("bob", [8, 40])
+      |> occupy_box("bob", 8)
+      |> delivery_points_for(35)
+    assert delivery_points == ["bob"]
+  end
+
+  # not present locker occupy attemp
   # hub and locker mixed example
 
 end
