@@ -4,8 +4,8 @@ defmodule DeliveryService do
     []  
   end
 
-  def register_hub(_state, hub_name) do
-    [hub_name | []]
+  def register_hub(state, hub_name) do
+    [hub_name | state]
   end
 
   def delivery_points_for(state, _size) do
