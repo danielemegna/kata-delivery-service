@@ -18,6 +18,11 @@ defmodule DeliveryService do
       |> Enum.map(&(&1.name))
   end
 
+  def occupy_box(state, locker_name, _box_size) do
+    locker = Enum.find(state, &(&1.name == locker_name))
+    List.delete(state, locker)
+  end
+
   defp can_contain(%{box_sizes: box_sizes}, package_size) do
     Enum.any?(box_sizes, fn box_size ->
       box_size >= package_size

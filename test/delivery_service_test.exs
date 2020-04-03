@@ -54,6 +54,14 @@ defmodule DeliveryServiceTest do
     assert delivery_points == ["alice"]
   end
 
+  test "occupy locker box small enough" do
+    delivery_points = DeliveryService.init()
+      |> register_locker("alice", [10, 60])
+      |> occupy_box("alice", 60)
+      |> delivery_points_for(50)
+    assert delivery_points == []
+  end
+
   # occupied locker
   # hub and locker mixed example
 
