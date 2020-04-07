@@ -70,6 +70,7 @@ defmodule DeliveryServiceTest do
     assert delivery_points == ["bob"]
   end
 
+  # hub occupy box attemp
   # not present locker occupy attemp
   # hub and locker mixed example
 

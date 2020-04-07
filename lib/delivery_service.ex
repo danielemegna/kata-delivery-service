@@ -5,11 +5,11 @@ defmodule DeliveryService do
   end
 
   def register_hub(state, hub_name) do
-    [%{name: hub_name} | state]
+    [%Hub{name: hub_name} | state]
   end
 
   def register_locker(state, locker_name, box_sizes) do
-    [%{name: locker_name, box_sizes: box_sizes} | state]
+    [%Locker{name: locker_name, box_sizes: box_sizes} | state]
   end
 
   def delivery_points_for(state, package_size) do
@@ -19,19 +19,23 @@ defmodule DeliveryService do
   end
 
   def occupy_box(state, locker_name, box_size) do
-    locker = Enum.find(state, &(&1.name == locker_name))
+    locker = get_locker(state, locker_name)
     updated_boxes = List.delete(locker.box_sizes, box_size)
     updated_locker = %{ locker | box_sizes: updated_boxes }
     state = List.delete(state, locker)
     [updated_locker | state]
   end
 
-  defp can_contain(%{box_sizes: box_sizes}, package_size) do
-    Enum.any?(box_sizes, fn box_size ->
-      box_size >= package_size
-    end)
+  defp get_locker(state, locker_name),do: Enum.find(state, &(&1.name == locker_name))
+
+  defp can_contain(%Hub{}, _package_size), do: true
+
+  defp can_contain(%Locker{} = locker, package_size) do
+      Enum.any?(locker.box_sizes, fn box_size ->
+        box_size >= package_size
+      end)
   end
 
-  defp can_contain(_point, _package_size), do: true
 
 end
+
