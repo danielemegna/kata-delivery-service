@@ -70,8 +70,24 @@ defmodule DeliveryServiceTest do
     assert delivery_points == ["bob"]
   end
 
-  # hub occupy box attemp
-  # not present locker occupy attemp
+  test "hub occupy box attemps are ignored" do
+    delivery_points = DeliveryService.init()
+      |> register_hub("market46")
+      |> occupy_box("market46", 10)
+      |> delivery_points_for(50)
+    assert delivery_points == ["market46"]
+  end
+
+  test "not present locker occupy attemps are ignored" do
+    delivery_points = DeliveryService.init()
+      |> register_locker("alice", [60])
+      |> register_locker("bob", [70])
+      |> occupy_box("not-present", 1)
+      |> occupy_box("alice", 1)
+      |> delivery_points_for(50)
+    assert delivery_points == ["alice", "bob"]
+  end
+
   # hub and locker mixed example
 
 end
