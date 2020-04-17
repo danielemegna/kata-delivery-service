@@ -39,6 +39,13 @@ defmodule DeliveryServiceTest do
     assert_lists_equal(delivery_points, [])
   end
 
+  test "strange locker without boxes" do
+    delivery_points = DeliveryService.init()
+      |> register_locker("evia", [])
+      |> delivery_points_for(1)
+    assert_lists_equal(delivery_points, [])
+  end
+
   test "multiple lockers" do
     delivery_points = DeliveryService.init()
       |> register_locker("lisa", [1])
