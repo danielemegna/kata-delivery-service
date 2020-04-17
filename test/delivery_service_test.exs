@@ -1,19 +1,20 @@
 defmodule DeliveryServiceTest do
   use ExUnit.Case
+  import Assertions, only: [assert_lists_equal: 2]
 
   import DeliveryService
 
   test "no delivery point" do
     delivery_points = DeliveryService.init()
       |> delivery_points_for(50)
-    assert delivery_points == []
+    assert_lists_equal(delivery_points, [])
   end
 
   test "single available hub" do
     delivery_points = DeliveryService.init()
       |> register_hub("market46")
       |> delivery_points_for(50)
-    assert delivery_points == ["market46"]
+    assert_lists_equal(delivery_points, ["market46"])
   end
 
   test "multiple available hubs" do
@@ -21,21 +22,21 @@ defmodule DeliveryServiceTest do
       |> register_hub("market46")
       |> register_hub("gas-station")
       |> delivery_points_for(50)
-    assert delivery_points == ["gas-station", "market46"]
+    assert_lists_equal(delivery_points, ["market46", "gas-station"])
   end
 
   test "single locker big enough" do
     delivery_points = DeliveryService.init()
       |> register_locker("evia", [80])
       |> delivery_points_for(50)
-    assert delivery_points == ["evia"]
+    assert_lists_equal(delivery_points, ["evia"])
   end
 
   test "single little locker" do
     delivery_points = DeliveryService.init()
       |> register_locker("lisa", [1])
       |> delivery_points_for(50)
-    assert delivery_points == []
+    assert_lists_equal(delivery_points, [])
   end
 
   test "multiple lockers" do
@@ -43,7 +44,7 @@ defmodule DeliveryServiceTest do
       |> register_locker("lisa", [1])
       |> register_locker("evia", [50])
       |> delivery_points_for(50)
-    assert delivery_points == ["evia"]
+    assert_lists_equal(delivery_points, ["evia"])
   end
 
   test "lockers with multiple boxes" do
@@ -51,7 +52,7 @@ defmodule DeliveryServiceTest do
       |> register_locker("alice", [10, 60])
       |> register_locker("bob", [8, 40])
       |> delivery_points_for(50)
-    assert delivery_points == ["alice"]
+    assert_lists_equal(delivery_points, ["alice"])
   end
 
   test "occupy locker box small enough" do
@@ -59,7 +60,7 @@ defmodule DeliveryServiceTest do
       |> register_locker("alice", [10, 60])
       |> occupy_box("alice", 60)
       |> delivery_points_for(50)
-    assert delivery_points == []
+    assert_lists_equal(delivery_points, [])
   end
 
   test "occupy not influent locker box" do
@@ -67,7 +68,7 @@ defmodule DeliveryServiceTest do
       |> register_locker("bob", [8, 40])
       |> occupy_box("bob", 8)
       |> delivery_points_for(35)
-    assert delivery_points == ["bob"]
+    assert_lists_equal(delivery_points, ["bob"])
   end
 
   test "hub occupy box attemps are ignored" do
@@ -75,7 +76,7 @@ defmodule DeliveryServiceTest do
       |> register_hub("market46")
       |> occupy_box("market46", 10)
       |> delivery_points_for(50)
-    assert delivery_points == ["market46"]
+    assert_lists_equal(delivery_points, ["market46"])
   end
 
   test "not present locker occupy attemps are ignored" do
@@ -85,7 +86,7 @@ defmodule DeliveryServiceTest do
       |> occupy_box("not-present", 1)
       |> occupy_box("alice", 1)
       |> delivery_points_for(50)
-    assert delivery_points == ["alice", "bob"]
+    assert_lists_equal(delivery_points, ["alice", "bob"])
   end
 
   test "first iteration complete example" do
@@ -96,9 +97,7 @@ defmodule DeliveryServiceTest do
       |> occupy_box("bob", 70)
       |> occupy_box("alice", 10)
       |> delivery_points_for(50)
-    assert delivery_points == ["alice", "market46"]
+    assert_lists_equal(delivery_points, ["alice", "market46"])
   end
-
-
 
 end
