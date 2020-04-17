@@ -88,6 +88,17 @@ defmodule DeliveryServiceTest do
     assert delivery_points == ["alice", "bob"]
   end
 
-  # hub and locker mixed example
+  test "first iteration complete example" do
+    delivery_points = DeliveryService.init()
+      |> register_locker("alice", [10, 60])
+      |> register_locker("bob", [8, 70])
+      |> register_hub("market46")
+      |> occupy_box("bob", 70)
+      |> occupy_box("alice", 10)
+      |> delivery_points_for(50)
+    assert delivery_points == ["alice", "market46"]
+  end
+
+
 
 end
